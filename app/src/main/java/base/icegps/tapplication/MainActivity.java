@@ -78,8 +78,81 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        Backup();
-//        UTMToMgrs2();
+//        Backup();
+//        MGRSTOUTM();
+        UTMTOMGRS();
+    }
+
+    private void UTMTOMGRS() {
+        double PI_OVER_180 = (PI / 180.0);
+        double _longitude=114.2544978287;
+        double _latitude=22.7075493478;
+        double height=60.857575757;
+        CoordinateSystemParameters sourceParameters = new UTMParameters(CoordinateType.UTM,31,0);
+        CoordinateSystemParameters targetParameters = new CoordinateSystemParameters(CoordinateType.MGRS);
+
+        JNICoordinateConversionService jniCoordinateConversionService =null;
+        try {
+            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "EUR-7", targetParameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CoordinateTuple coordinateTuple =new UTMCoordinates(CoordinateType.UTM,40,'N',550000,30);
+        CoordinateTuple resultTuple =new MGRSorUSNGCoordinates(CoordinateType.MGRS);
+
+        Accuracy targetAccuracy = new Accuracy();
+
+        try {
+            ConvertResults convertResults = jniCoordinateConversionService.convertSourceToTarget(coordinateTuple, targetAccuracy,
+                    resultTuple, targetAccuracy);
+
+            resultTuple = convertResults.getCoordinateTuple();
+            targetAccuracy = convertResults.getAccuracy();
+
+            UTMCoordinates u= (UTMCoordinates) convertResults.getCoordinateTuple();
+            String  warningMessage = resultTuple.getWarningMessage();
+            String   errorMessage = resultTuple.getErrorMessage();
+            Log.i("TAG","warningMessage:"+warningMessage+",errorMessage:"+errorMessage);
+            Log.e("TAG","Easting:"+u.getEasting()+",Northing:"+u.getNorthing());
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void MGRSTOUTM() {
+        double PI_OVER_180 = (PI / 180.0);
+        double _longitude=114.2544978287;
+        double _latitude=22.7075493478;
+        double height=60.857575757;
+
+        CoordinateSystemParameters sourceParameters = new GeodeticParameters(CoordinateType.MGRS, HeightType.NO_HEIGHT);
+        CoordinateSystemParameters targetParameters = new UTMParameters(CoordinateType.UTM,31,0);
+        JNICoordinateConversionService jniCoordinateConversionService =null;
+        try {
+            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "EUR-7", targetParameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        CoordinateTuple coordinateTuple =new MGRSorUSNGCoordinates(CoordinateType.MGRS,1000);
+        CoordinateTuple resultTuple =new UTMCoordinates(CoordinateType.UTM);
+        Accuracy targetAccuracy = new Accuracy();
+
+        try {
+            ConvertResults convertResults = jniCoordinateConversionService.convertSourceToTarget(coordinateTuple, targetAccuracy,
+                    resultTuple, targetAccuracy);
+
+            resultTuple = convertResults.getCoordinateTuple();
+            targetAccuracy = convertResults.getAccuracy();
+
+            UTMCoordinates u= (UTMCoordinates) convertResults.getCoordinateTuple();
+            String  warningMessage = resultTuple.getWarningMessage();
+            String   errorMessage = resultTuple.getErrorMessage();
+            Log.i("TAG","warningMessage:"+warningMessage+",errorMessage:"+errorMessage);
+            Log.e("TAG","Easting:"+u.getEasting()+",Northing:"+u.getNorthing());
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
     }
 
     private void Backup() {
