@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TableRow
+        android:id="@id/hemisphereTableRow"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/hemisphereTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5.0dip"
+            android:text="Hemisphere"
+            android:textAppearance="?android:textAppearanceSmall" />
+
+        <RadioGroup
+            android:id="@+id/hemisphereRadioGroup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:orientation="horizontal"
+            android:padding="5.0dip">
+
+            <RadioButton
+                android:id="@+id/radioNorth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="N"
+                android:textAppearance="?android:textAppearanceSmall" />
+
+            <RadioButton
+                android:id="@+id/radioSouth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S"
+                android:textAppearance="?android:textAppearanceSmall" />
+        </RadioGroup>
+    </TableRow>
+</TableLayout>

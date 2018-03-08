@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/utmTableLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="10.0dip"
+    android:stretchColumns="1">
+
+    <TableRow
+        android:id="@+id/hemisphereTableRow"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10.0dip">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.0"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/overrideTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5.0dip"
+                android:text="Override"
+                android:textAppearance="?android:textAppearanceSmall" />
+
+            <CheckBox
+                android:id="@+id/overrideCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5.0dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/zoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5.0dip"
+                android:paddingLeft="15.0dip"
+                android:text="Zone"
+                android:textAppearance="?android:textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/zoneEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:ems="5"
+                android:inputType="number"
+                android:padding="5.0dip"
+                android:text="0" />
+        </LinearLayout>
+    </TableRow>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip"
+        android:background="@android:color/darker_gray" />
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10.0dip">
+
+        <include
+            android:id="@+id/hemisphereTuple"
+            layout="@layout/hemisphere_tuple"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip"
+        android:background="@android:color/darker_gray" />
+
+    <include
+        android:id="@+id/eastNorthTuple"
+        layout="@layout/easting_northing_tuple"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip"
+        android:background="@android:color/darker_gray" />
+</TableLayout>
