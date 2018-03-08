@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CoordinateTuple coordinateTuple =new UTMCoordinates(CoordinateType.UTM,40,'N',550000,30);
+        CoordinateTuple coordinateTuple =new UTMCoordinates(CoordinateType.UTM,31,'N',550000,30);
         CoordinateTuple resultTuple =new MGRSorUSNGCoordinates(CoordinateType.MGRS);
 
         Accuracy targetAccuracy = new Accuracy();
@@ -109,11 +109,11 @@ public class MainActivity extends AppCompatActivity {
             resultTuple = convertResults.getCoordinateTuple();
             targetAccuracy = convertResults.getAccuracy();
 
-            UTMCoordinates u= (UTMCoordinates) convertResults.getCoordinateTuple();
+            MGRSorUSNGCoordinates u= (MGRSorUSNGCoordinates) convertResults.getCoordinateTuple();
             String  warningMessage = resultTuple.getWarningMessage();
             String   errorMessage = resultTuple.getErrorMessage();
             Log.i("TAG","warningMessage:"+warningMessage+",errorMessage:"+errorMessage);
-            Log.e("TAG","Easting:"+u.getEasting()+",Northing:"+u.getNorthing());
+            Log.e("TAG","Easting:"+u.getCoordinateString());
         } catch (CoordinateConversionException e) {
             e.printStackTrace();
         }
