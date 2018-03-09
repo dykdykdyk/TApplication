@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 //        Backup();
-//        MGRSTOUTM();
-        UTMTOMGRS();
+        MGRSTOUTM();
+//        UTMTOMGRS();
     }
 
     private void UTMTOMGRS() {
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CoordinateTuple coordinateTuple =new UTMCoordinates(CoordinateType.UTM,31,'N',550000,30);
+        CoordinateTuple coordinateTuple =new UTMCoordinates(CoordinateType.UTM);
         CoordinateTuple resultTuple =new MGRSorUSNGCoordinates(CoordinateType.MGRS);
 
         Accuracy targetAccuracy = new Accuracy();
@@ -124,20 +124,17 @@ public class MainActivity extends AppCompatActivity {
         double _longitude=114.2544978287;
         double _latitude=22.7075493478;
         double height=60.857575757;
-
-        CoordinateSystemParameters sourceParameters = new GeodeticParameters(CoordinateType.MGRS, HeightType.NO_HEIGHT);
+        CoordinateSystemParameters sourceParameters = new CoordinateSystemParameters(CoordinateType.MGRS);
         CoordinateSystemParameters targetParameters = new UTMParameters(CoordinateType.UTM,31,0);
         JNICoordinateConversionService jniCoordinateConversionService =null;
         try {
-            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "EUR-7", targetParameters);
+            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "WGE", targetParameters);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        CoordinateTuple coordinateTuple =new MGRSorUSNGCoordinates(CoordinateType.MGRS,1000);
+        CoordinateTuple coordinateTuple =new MGRSorUSNGCoordinates(CoordinateType.MGRS,"31NEA0055550000",80);
         CoordinateTuple resultTuple =new UTMCoordinates(CoordinateType.UTM);
         Accuracy targetAccuracy = new Accuracy();
-
         try {
             ConvertResults convertResults = jniCoordinateConversionService.convertSourceToTarget(coordinateTuple, targetAccuracy,
                     resultTuple, targetAccuracy);
@@ -149,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
             String  warningMessage = resultTuple.getWarningMessage();
             String   errorMessage = resultTuple.getErrorMessage();
             Log.i("TAG","warningMessage:"+warningMessage+",errorMessage:"+errorMessage);
-            Log.e("TAG","Easting:"+u.getEasting()+",Northing:"+u.getNorthing());
+            Log.e("TAG","Easting:"+u.getEasting());
+            Log.e("TAG","getNorthing:"+u.getNorthing());
         } catch (CoordinateConversionException e) {
             e.printStackTrace();
         }
