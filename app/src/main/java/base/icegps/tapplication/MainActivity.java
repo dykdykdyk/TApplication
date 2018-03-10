@@ -27,6 +27,7 @@ import geotrans3.coordinates.MapProjectionCoordinates;
 import geotrans3.coordinates.UPSCoordinates;
 import geotrans3.coordinates.UTMCoordinates;
 import geotrans3.enumerations.CoordinateType;
+import geotrans3.enumerations.DatumType;
 import geotrans3.enumerations.HeightType;
 import geotrans3.enumerations.SourceOrTarget;
 import geotrans3.exception.CoordinateConversionException;
@@ -35,6 +36,7 @@ import geotrans3.jni.JNICoordinateConversionService;
 import geotrans3.jni.JNIDatumLibrary;
 import geotrans3.jni.JNIEllipsoidLibrary;
 import geotrans3.jni.JNIFiomeths;
+import geotrans3.misc.Info;
 import geotrans3.parameters.CoordinateSystemParameters;
 import geotrans3.parameters.EquidistantCylindricalParameters;
 import geotrans3.parameters.GeodeticParameters;
@@ -55,7 +57,7 @@ import jni.JniServiceManager;
 import static java.lang.Math.PI;
 
 public class MainActivity extends AppCompatActivity {
-
+ ///storage/emulated/0/icegps/ellips.dat
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -88,9 +90,105 @@ public class MainActivity extends AppCompatActivity {
 
         /*
         * Datum PUK:PULKOVO 1942,Russia (克拉索夫斯基椭球)
-        * 投影方式:高斯-克吕格投影
+        * 投影方式:高斯-克吕格投影(横向墨卡托投影)
         * */
         //北京54
+        StandtoBEIJING54();
+    }
+
+    private void StandtoBEIJING54() {
+        //int coordinateType, double _longitude, double _latitude, double _height
+        /**
+         *   ellipsoid 椭球
+         datum 基准面(椭球) CoordinateTuple
+         CoordinateSystemConfig 投影方式
+
+         Coordinate Tuple 坐标元祖
+         */
+        /**
+         * GeodeticCoordinates
+         */
+
+        double PI_OVER_180 = (PI / 180.0);
+        double _longitude=114.24359067;
+        double _latitude=22.70475300;
+        double height=60.857575757;
+
+        CoordinateSystemParameters sourceParameters = new GeodeticParameters(CoordinateType.GEODETIC, HeightType.NO_HEIGHT);
+        CoordinateSystemParameters targetParameters = new MapProjection5Parameters(CoordinateType.TRANMERC,117.0*PI_OVER_180,0,1
+                ,500000,0);
+        JNICoordinateConversionService jniCoordinateConversionService =null;
+        try {
+            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "WGE", targetParameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //一.创建ellipsoid(椭球)
+        //创建JNIEllipsoidLibrary
+        JNIEllipsoidLibrary jniEllipsoidLibrary = null;
+        try {
+            jniEllipsoidLibrary =new JNIEllipsoidLibrary(jniCoordinateConversionService.getEllipsoidLibrary());
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
+        //写死参数 默认 北京54参数
+        /*
+        参数意义
+          1.ellipsoidCode code
+          2.ellipsoidName Name
+          3.semiMajorAxis 半轴长
+          4. invFlattening 扁率
+         */
+        try {
+            jniEllipsoidLibrary.defineEllipsoid("BJ",
+                    "BJ1954",
+                    6378245, 1/298.3);
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
+        //二.创建Datum(参考平面)
+        JNIDatumLibrary jniDatumLibrary = null;
+        try {
+            jniDatumLibrary = new JNIDatumLibrary(jniCoordinateConversionService.getDatumLibrary());
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
+        try {
+            jniDatumLibrary.defineDatum(DatumType.threeParamDatum, "BJ", "CHINA BeiJing 1954",
+                    "BJ: BJ1954",
+                    0, 0, 0, -1, -1, -1,
+                    //后面两排 固定值
+                    180*PI_OVER_180, 180*PI_OVER_180, 90*PI_OVER_180, 90*PI_OVER_180,
+                    0.0, 0.0, 0.0, 0.0);
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
+        //重新赋值
+        try {
+            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "BJ", targetParameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CoordinateTuple coordinateTuple =new GeodeticCoordinates(CoordinateType.GEODETIC,_longitude *PI_OVER_180,_latitude *PI_OVER_180,height);
+        CoordinateTuple resultTuple =new MapProjectionCoordinates(CoordinateType.TRANMERC);
+        Accuracy targetAccuracy = new Accuracy();
+
+        try {
+            ConvertResults convertResults = jniCoordinateConversionService.convertSourceToTarget(coordinateTuple, targetAccuracy,
+                    resultTuple, targetAccuracy);
+
+            resultTuple = convertResults.getCoordinateTuple();
+            targetAccuracy = convertResults.getAccuracy();
+
+            MapProjectionCoordinates u= (MapProjectionCoordinates) convertResults.getCoordinateTuple();
+            String  warningMessage = resultTuple.getWarningMessage();
+            String   errorMessage = resultTuple.getErrorMessage();
+            Log.i("TAG","warningMessage:"+warningMessage+",errorMessage:"+errorMessage);
+            Log.e("TAG","Easting:"+u.getEasting()+",Northing:"+u.getNorthing());
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
     }
 
     private void StandtoCGCS2000() {
