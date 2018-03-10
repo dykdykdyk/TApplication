@@ -79,8 +79,109 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 //        Backup();
-        MGRSTOUTM();
+//        MGRSTOUTM();
 //        UTMTOMGRS();
+        //普通经纬度坐标转换utm
+//        StandtoUTM();
+        //普通经纬度坐标转换国家2000
+//        StandtoCGCS2000();
+    }
+
+    private void StandtoCGCS2000() {
+        //int coordinateType, double _longitude, double _latitude, double _height
+        /**
+         *   ellipsoid 椭球
+         datum 基准面(椭球) CoordinateTuple
+         CoordinateSystemConfig 投影方式
+
+         Coordinate Tuple 坐标元祖
+         */
+        /**
+         * GeodeticCoordinates
+         */
+
+        double PI_OVER_180 = (PI / 180.0);
+        double _longitude=114.2544978287;
+        double _latitude=22.7075493478;
+        double height=60.857575757;
+
+        CoordinateSystemParameters sourceParameters = new GeodeticParameters(CoordinateType.GEODETIC, HeightType.NO_HEIGHT);
+        CoordinateSystemParameters targetParameters = new MapProjection5Parameters(CoordinateType.TRANMERC,117.0*PI_OVER_180,0,1
+        ,500000,0);
+        JNICoordinateConversionService jniCoordinateConversionService =null;
+        try {
+            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "WGE", targetParameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        CoordinateTuple coordinateTuple =new GeodeticCoordinates(CoordinateType.GEODETIC,_longitude *PI_OVER_180,_latitude *PI_OVER_180,height);
+        CoordinateTuple resultTuple =new MapProjectionCoordinates(CoordinateType.TRANMERC);
+        Accuracy targetAccuracy = new Accuracy();
+
+        try {
+            ConvertResults convertResults = jniCoordinateConversionService.convertSourceToTarget(coordinateTuple, targetAccuracy,
+                    resultTuple, targetAccuracy);
+
+            resultTuple = convertResults.getCoordinateTuple();
+            targetAccuracy = convertResults.getAccuracy();
+
+            MapProjectionCoordinates u= (MapProjectionCoordinates) convertResults.getCoordinateTuple();
+            String  warningMessage = resultTuple.getWarningMessage();
+            String   errorMessage = resultTuple.getErrorMessage();
+            Log.i("TAG","warningMessage:"+warningMessage+",errorMessage:"+errorMessage);
+            Log.e("TAG","Easting:"+u.getEasting()+",Northing:"+u.getNorthing());
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void StandtoUTM() {
+        //int coordinateType, double _longitude, double _latitude, double _height
+        /**
+         *   ellipsoid 椭球
+         datum 基准面(椭球) CoordinateTuple
+         CoordinateSystemConfig 投影方式
+
+         Coordinate Tuple 坐标元祖
+         */
+        /**
+         * GeodeticCoordinates
+         */
+
+        double PI_OVER_180 = (PI / 180.0);
+        double _longitude=114.2544978287;
+        double _latitude=22.7075493478;
+        double height=60.857575757;
+
+        CoordinateSystemParameters sourceParameters = new GeodeticParameters(CoordinateType.GEODETIC, HeightType.NO_HEIGHT);
+        CoordinateSystemParameters targetParameters = new UTMParameters(CoordinateType.UTM,31,0);
+        JNICoordinateConversionService jniCoordinateConversionService =null;
+        try {
+            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "WGE", targetParameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        CoordinateTuple coordinateTuple =new GeodeticCoordinates(CoordinateType.GEODETIC,_longitude *PI_OVER_180,_latitude *PI_OVER_180,height);
+        CoordinateTuple resultTuple =new UTMCoordinates(CoordinateType.UTM);
+        Accuracy targetAccuracy = new Accuracy();
+
+        try {
+            ConvertResults convertResults = jniCoordinateConversionService.convertSourceToTarget(coordinateTuple, targetAccuracy,
+                    resultTuple, targetAccuracy);
+
+            resultTuple = convertResults.getCoordinateTuple();
+            targetAccuracy = convertResults.getAccuracy();
+
+            UTMCoordinates u= (UTMCoordinates) convertResults.getCoordinateTuple();
+            String  warningMessage = resultTuple.getWarningMessage();
+            String   errorMessage = resultTuple.getErrorMessage();
+            Log.i("TAG","warningMessage:"+warningMessage+",errorMessage:"+errorMessage);
+            Log.e("TAG","Easting:"+u.getEasting()+",Northing:"+u.getNorthing());
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
     }
 
     private void UTMTOMGRS() {
