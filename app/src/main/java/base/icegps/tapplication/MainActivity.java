@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 //        StandtoCGCS2000();
 
         /*
-        * Datum PUK:PULKOVO 1942,Russia
+        * Datum PUK:PULKOVO 1942,Russia (克拉索夫斯基椭球)
         * 投影方式:高斯-克吕格投影
         * */
         //北京54
