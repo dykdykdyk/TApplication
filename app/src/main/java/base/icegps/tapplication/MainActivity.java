@@ -85,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
 //        StandtoUTM();
         //普通经纬度坐标转换国家2000
 //        StandtoCGCS2000();
+
+        /*
+        * Datum PUK:PULKOVO 1942,Russia
+        * 投影方式:高斯-克吕格投影
+        * */
+        //北京54
     }
 
     private void StandtoCGCS2000() {
