@@ -1,12 +1,18 @@
 package base.icegps.tapplication;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 //        MGRSTOUTM();
 //        UTMTOMGRS();
         //普通经纬度坐标转换utm
-//        StandtoUTM();
+        StandtoUTM();
         //普通经纬度坐标转换国家2000
 //        StandtoCGCS2000();
 
@@ -93,7 +99,22 @@ public class MainActivity extends AppCompatActivity {
         * 投影方式:高斯-克吕格投影(横向墨卡托投影 TM)
         * */
         //北京54
-        StandtoBEIJING54();
+
+//        File file =new File(Environment.getExternalStorageDirectory().getPath() + "/" + "icegps"+"/ellips.dat");
+//        Log.i("TAG",":::"+Environment.getExternalStorageDirectory().getPath() + "/" + "icegps"+"/ellips.dat");
+//        try {
+//            FileOutputStream fileOutputStream =new FileOutputStream(file);
+//            try {
+//                fileOutputStream.write("11111111111111111111111111111111111111111111111".getBytes());
+//                fileOutputStream.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
+//        StandtoBEIJING54();
     }
 
     private void StandtoBEIJING54() {
@@ -140,13 +161,13 @@ public class MainActivity extends AppCompatActivity {
           3.semiMajorAxis 半轴长
           4. invFlattening 扁率
          */
-        try {
-            jniEllipsoidLibrary.defineEllipsoid("BJ",
-                    "BJ1954",
-                    6378245, 1/298.3);
-        } catch (CoordinateConversionException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            jniEllipsoidLibrary.defineEllipsoid("BJ",
+//                    "BJ1954",
+//                    6378245, 1/298.3);
+//        } catch (CoordinateConversionException e) {
+//            e.printStackTrace();
+//        }
         //二.创建Datum(参考平面)
         JNIDatumLibrary jniDatumLibrary = null;
         try {
@@ -159,13 +180,15 @@ public class MainActivity extends AppCompatActivity {
                     "BJ: BJ1954",
                     0, 0, 0, -1, -1, -1,
                     //后面两排 固定值
-                    180*PI_OVER_180, 180*PI_OVER_180, 90*PI_OVER_180, 90*PI_OVER_180,
+                    179.9999998*PI_OVER_180, 179.9999999*PI_OVER_180, 89.9999998*PI_OVER_180, 89.9999999*PI_OVER_180,
                     0.0, 0.0, 0.0, 0.0);
         } catch (CoordinateConversionException e) {
             e.printStackTrace();
         }
         //重新赋值
         try {
+            if(jniCoordinateConversionService != null)
+                jniCoordinateConversionService.destroy();
             jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "BJ", targetParameters);
         } catch (Exception e) {
             e.printStackTrace();

@@ -2270,17 +2270,22 @@ void DatumLibraryImplementation::write3ParamFile()
   CCSThreadLock lock(&mutex);
 
   /*output updated 3-parameter datum table*/
-  PathName = getenv( "MSPCCS_DATA" );
-  if (PathName != NULL)
-  {
+//  PathName = getenv( "MSPCCS_DATA" );
+//  if (PathName != NULL)
+//  {
+//    strcpy( FileName, PathName );
+//    strcat( FileName, "/" );
+//  }
+//  else
+//  {
+//    strcpy( FileName, "../../data/" );
+//  }
+//  strcat( FileName, "3_param.dat" );
+    PathName = "/storage/emulated/0/icegps/";
+//    FileName = new char[ 80 ];
     strcpy( FileName, PathName );
-    strcat( FileName, "/" );
-  }
-  else
-  {
-    strcpy( FileName, "../../data/" );
-  }
-  strcat( FileName, "3_param.dat" );
+//    strcat( FileName, "libellipsdat.so" );
+    strcat( FileName, "3_param.dat" );
 
   if ((fp_3param = fopen(FileName, "w")) == NULL)
   { /* fatal error */

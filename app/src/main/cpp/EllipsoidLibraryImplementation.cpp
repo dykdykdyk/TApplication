@@ -353,7 +353,7 @@ void EllipsoidLibraryImplementation::defineEllipsoid( const char* code, const ch
   CCSThreadLock lock(&mutex);
 
   /*output updated ellipsoid table*/
-  PathName = getenv( "MSPCCS_DATA" );
+//  PathName = getenv( "MSPCCS_DATA" );
   /*if( PathName != NULL )
   {
      strcpy( FileName, PathName );
@@ -363,7 +363,17 @@ void EllipsoidLibraryImplementation::defineEllipsoid( const char* code, const ch
   {
      strcpy( FileName, "../../data/" );
   }*/
-  strcat( FileName, "/assets/ellips.dat" );
+//  strcat( FileName, "/assets/ellips.dat" );
+
+//    PathName = "/data/data/base.icegps.tapplication/lib/";
+    PathName = "/storage/emulated/0/icegps/";
+//    FileName = new char[ 80 ];
+    strcpy( FileName, PathName );
+//    strcat( FileName, "libellipsdat.so" );
+    strcat( FileName, "ellips.dat" );
+
+
+    // /storage/emulated/0/icegps/ellips.dat
 
   if( ( fp = fopen( FileName, "w" ) ) == NULL )
   { /* fatal error */
@@ -437,17 +447,23 @@ void EllipsoidLibraryImplementation::removeEllipsoid( const char* code )
    CCSThreadLock lock(&mutex);
 
    /*output updated ellipsoid table*/
-   PathName = getenv( "MSPCCS_DATA" );
-   if( PathName != NULL )
-   {
-      strcpy( FileName, PathName );
-      strcat( FileName, "/" );
-   }
-   else
-   {
-      strcpy( FileName, "../../data/" );
-   }
-   strcat( FileName, "ellips.dat" );
+//   PathName = getenv( "MSPCCS_DATA" );
+//   if( PathName != NULL )
+//   {
+//      strcpy( FileName, PathName );
+//      strcat( FileName, "/" );
+//   }
+//   else
+//   {
+//      strcpy( FileName, "../../data/" );
+//   }
+//   strcat( FileName, "ellips.dat" );
+
+    PathName = "/storage/emulated/0/icegps/";
+//    FileName = new char[ 80 ];
+    strcpy( FileName, PathName );
+//    strcat( FileName, "libellipsdat.so" );
+    strcat( FileName, "ellips.dat" );
    if( ( fp = fopen( FileName, "w" ) ) == NULL )
    { /* fatal error */
       throw CoordinateConversionException( ErrorMessages::ellipsoidFileOpenError );
@@ -714,10 +730,18 @@ void EllipsoidLibraryImplementation::loadEllipsoids()
 //	}
 //   strcat( FileName, "ellips.dat" );
 
-    PathName = "/data/data/base.icegps.tapplication/lib/";
+//    PathName = "/data/data/base.icegps.tapplication/lib/";
+//    FileName = new char[ 80 ];
+//    strcpy( FileName, PathName );
+//    strcat( FileName, "libellipsdat.so" );
+
+
+    PathName = "/storage/emulated/0/icegps/";
     FileName = new char[ 80 ];
     strcpy( FileName, PathName );
-    strcat( FileName, "libellipsdat.so" );
+//    strcat( FileName, "libellipsdat.so" );
+    strcat( FileName, "ellips.dat" );
+
 //    strcat( FileName, "libellipsdat.so" );
 //    FileName = new char[ strlen( PathName ) + 12 ];
 //    strcpy( FileName, PathName );
