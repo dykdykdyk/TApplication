@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         /*
         * Datum PUK:PULKOVO 1942,Russia (克拉索夫斯基椭球)
-        * 投影方式:高斯-克吕格投影(横向墨卡托投影)
+        * 投影方式:高斯-克吕格投影(横向墨卡托投影 TM)
         * */
         //北京54
         StandtoBEIJING54();
