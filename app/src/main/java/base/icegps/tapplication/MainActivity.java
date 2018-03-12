@@ -278,8 +278,10 @@ public class MainActivity extends AppCompatActivity {
          */
 
         double PI_OVER_180 = (PI / 180.0);
-        double _longitude=114.2544978287;
-        double _latitude=22.7075493478;
+        //114 14 37 .5024  114+14/60+37.5024/3600  0.23333333333  114.2437506633633
+        // 22 42 16.8336   22+42/60+16.8336/3600  22.704676
+        double _longitude=114.2437506633633;
+        double _latitude=22.704676;
         double height=60.857575757;
 
         CoordinateSystemParameters sourceParameters = new GeodeticParameters(CoordinateType.GEODETIC, HeightType.NO_HEIGHT);

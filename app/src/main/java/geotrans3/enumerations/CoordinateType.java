@@ -94,6 +94,7 @@ public class CoordinateType
   public final static int GRINTEN = 36;
   public final static int WEBMERCATOR = 37;
   public final static int F16GRS = 38;
+  public final static int BJ54 = 39;
   
   // Names
   public final static String ALBERS_STR = "Albers Equal Area Conic";
