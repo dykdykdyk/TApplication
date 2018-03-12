@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 //        MGRSTOUTM();
 //        UTMTOMGRS();
         //普通经纬度坐标转换utm
-        StandtoUTM();
+//        StandtoUTM();
         //普通经纬度坐标转换国家2000
 //        StandtoCGCS2000();
 
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-//        StandtoBEIJING54();
+        StandtoBEIJING54();
     }
 
     private void StandtoBEIJING54() {
@@ -161,13 +161,13 @@ public class MainActivity extends AppCompatActivity {
           3.semiMajorAxis 半轴长
           4. invFlattening 扁率
          */
-//        try {
-//            jniEllipsoidLibrary.defineEllipsoid("BJ",
-//                    "BJ1954",
-//                    6378245, 1/298.3);
-//        } catch (CoordinateConversionException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            jniEllipsoidLibrary.defineEllipsoid("BJ",
+                    "BJ1954",
+                    6378245, 1/298.3);
+        } catch (CoordinateConversionException e) {
+            e.printStackTrace();
+        }
         //二.创建Datum(参考平面)
         JNIDatumLibrary jniDatumLibrary = null;
         try {
@@ -187,9 +187,10 @@ public class MainActivity extends AppCompatActivity {
         }
         //重新赋值
         try {
+            JNICoordinateConversionService tempJNICoordinateConversionService = new JNICoordinateConversionService("WGE", sourceParameters, "BJ", targetParameters);
             if(jniCoordinateConversionService != null)
                 jniCoordinateConversionService.destroy();
-            jniCoordinateConversionService  = new JNICoordinateConversionService("WGE", sourceParameters, "BJ", targetParameters);
+            jniCoordinateConversionService  = tempJNICoordinateConversionService;
         } catch (Exception e) {
             e.printStackTrace();
         }
